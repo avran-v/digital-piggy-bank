@@ -13,5 +13,10 @@
     ],
     "action": {
         "default_popup": "home.html"
+    },
+    "icons": {
+        "16": "images/pig-16.png",
+        "32": "images/pig-32.png", 
+        "128": "images/pig-128/png"
     }
 }
