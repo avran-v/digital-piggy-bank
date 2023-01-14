@@ -1,0 +1,17 @@
+{
+    "manifest_version": 3,
+    "name": "Digital Piggy Bank", 
+    "version": "1.0",
+    "description": "An extension to stay conscious of your spending.",
+    "content_scripts": [
+        {
+            "js": ["scripts/content.js"], 
+            "matches": [
+                "https://www.amazon.com/*"
+            ]
+        }
+    ],
+    "action": {
+        "default_popup": "home.html"
+    }
+}
