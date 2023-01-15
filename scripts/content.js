@@ -1,21 +1,39 @@
+//resetting local storage values 
+//localStorage.removeItem("goalName");
+//localStorage.removeItem("progress");
+//localStorage.removeItem("goalValue");
+
+
 var priceContainer = document.querySelector("span.a-offscreen"); 
 const rawPrice = new String(priceContainer.textContent); 
 let price = parseFloat(rawPrice.substring(1)); 
 
+//container 1
+const piggyBankSetup = document.createElement("div"); 
+const setupMessage = document.createElement("h1"); 
+//add if statement to make sure this only shows if first time
+setupMessage.textContent = "Digital Piggy Bank is at work! Get started saving towards your next big goal!"; 
+piggyBankSetup.append(setupMessage); 
+
+//container 2
 const piggyBankContainer = document.createElement("div"); 
 const test = document.createElement("h3"); 
 piggyBankContainer.append(test); 
 
+//progress bar setup 
 const myProgress = document.createElement("div"); 
 myProgress.setAttribute('id', 'myProgress'); 
 const fullBar = document.createElement("div"); 
 fullBar.setAttribute('id', 'fullBar'); 
 fullBar.append(myProgress); 
 
+//extra message
+const congratsMessage = document.createElement("h1"); 
+
 //piggyBankContainer.append(fullBar); 
 test.textContent = "Why don't you save this money for your goal?"; 
-//const navbar = document.getElementById("navbar-main");
-//navbar.insertAdjacentElement("afterend", test); 
+const navbar = document.getElementById("navbar-main");
+navbar.insertAdjacentElement("afterend", piggyBankSetup); 
 const belowPrice = document.querySelector("div.a-section.a-spacing-none.aok-align-center");
 belowPrice.insertAdjacentElement("afterend", piggyBankContainer); 
 
@@ -29,10 +47,10 @@ function disableBuying(){
     const msg = document.createElement("h1"); 
     const msgHighlight = document.createElement("span");
     msgHighlight.setAttribute('id', 'msgHighlight'); 
-    msgHighlight.textContent = "You've saved [this much] towards your goal, aka ??%!"; 
     msg.append(msgHighlight);
     pageCover.append(msg);  
     pageCover.append(fullBar); 
+    pageCover.append(congratsMessage); 
 
     if(localStorage["progress"] > 0){
         var currentProgress = parseFloat(localStorage.progress) + price; 
@@ -40,10 +58,20 @@ function disableBuying(){
     } else {
         localStorage.progress = price;
     }
-    var totalSaved = parseFloat(localStorage.progress); 
-    var percentProgress = (totalSaved/100) * 100;   
-    msgHighlight.textContent = "You've saved $" + totalSaved.toFixed(2) + " towards your goal of $100, aka " + percentProgress.toFixed(2) +"%"; 
-    fillProgress(totalSaved); 
+    
+    if(currentProgress > parseFloat(localStorage.goalValue)){
+        msgHighlight.textContent = "You reached your " + localStorage.goalName + " goal of $" + localStorage.goalValue + "!"; 
+        localStorage.progress = currentProgress - parseFloat(localStorage.goalValue); 
+        localStorage.removeItem("goalName");
+        fillProgress(100); 
+        congratsMessage.textContent = "We saved the extra $" + parseFloat(localStorage.progress).toFixed(2) + " towards your next goal. Set it the next time you shop!"; 
+    } else {
+        var totalSaved = parseFloat(localStorage.progress); 
+        var percentProgress = (totalSaved/parseFloat(localStorage.goalValue)) * 100;   
+        msgHighlight.textContent = "You've saved $" + totalSaved.toFixed(2) + " towards your " + localStorage.goalName + " goal of $" + localStorage.goalValue + " aka " + percentProgress.toFixed(2) +"%!"; 
+        fillProgress(percentProgress); 
+        congratsMessage.textContent = "You're almost there! Keep staying mindful of your spending to reach your goal soon!"
+    }
 }
 
 var i = 0; 
@@ -62,6 +90,14 @@ function fillProgress(totalSaved) {
         }
     }
 }
+
+function firstTimeChecker(){
+    if(localStorage.goalName == null){
+        localStorage.goalName = prompt("What do you want to save money towards?"); 
+        localStorage.goalValue = prompt("What is the total amount for the goal? Number only, no symbols.");
+    }
+    disableBuying(); 
+}
 //add updateDisplays function that shows your goal 
 //and how far percentage wise you are to it
 //id="deskptop_buybox" should also have css class added to it
@@ -70,4 +106,4 @@ function fillProgress(totalSaved) {
 const saveButton = document.createElement("button"); 
 saveButton.textContent = "Let's save!"; 
 piggyBankContainer.append(saveButton); 
-saveButton.addEventListener("click", disableBuying);
+saveButton.addEventListener("click", firstTimeChecker);
