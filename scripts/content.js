@@ -12,13 +12,15 @@ let price = parseFloat(rawPrice.substring(1));
 const piggyBankSetup = document.createElement("div"); 
 const setupMessage = document.createElement("h1"); 
 //add if statement to make sure this only shows if first time
-setupMessage.textContent = "Digital Piggy Bank is at work! Get started saving towards your next big goal!"; 
+setupMessage.textContent = "Digital Piggy Bank is at work!"; 
 piggyBankSetup.append(setupMessage); 
+piggyBankSetup.setAttribute('id', 'piggyBankTitle'); 
 
 //container 2
 const piggyBankContainer = document.createElement("div"); 
 const test = document.createElement("h3"); 
 piggyBankContainer.append(test); 
+piggyBankContainer.setAttribute('id', 'piggyBankContainer'); 
 
 //progress bar setup 
 const myProgress = document.createElement("div"); 
@@ -48,9 +50,14 @@ function disableBuying(){
     const msgHighlight = document.createElement("span");
     msgHighlight.setAttribute('id', 'msgHighlight'); 
     msg.append(msgHighlight);
-    pageCover.append(msg);  
-    pageCover.append(fullBar); 
-    pageCover.append(congratsMessage); 
+
+    const savedConfirmation = document.createElement("div"); 
+    savedConfirmation.append(msg);
+    savedConfirmation.append(fullBar); 
+    savedConfirmation.append(congratsMessage); 
+    savedConfirmation.setAttribute('id', 'savedConfirmation');
+
+    pageCover.append(savedConfirmation);  
 
     if(localStorage["progress"] > 0){
         var currentProgress = parseFloat(localStorage.progress) + price; 
@@ -98,12 +105,9 @@ function firstTimeChecker(){
     }
     disableBuying(); 
 }
-//add updateDisplays function that shows your goal 
-//and how far percentage wise you are to it
-//id="deskptop_buybox" should also have css class added to it
-//blocking all things 
 
 const saveButton = document.createElement("button"); 
 saveButton.textContent = "Let's save!"; 
 piggyBankContainer.append(saveButton); 
 saveButton.addEventListener("click", firstTimeChecker);
+saveButton.setAttribute('id', 'saveButton'); 
