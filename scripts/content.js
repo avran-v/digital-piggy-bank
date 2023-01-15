@@ -12,7 +12,7 @@ const fullBar = document.createElement("div");
 fullBar.setAttribute('id', 'fullBar'); 
 fullBar.append(myProgress); 
 
-piggyBankContainer.append(fullBar); 
+//piggyBankContainer.append(fullBar); 
 test.textContent = "Why don't you save this money for your goal?"; 
 //const navbar = document.getElementById("navbar-main");
 //navbar.insertAdjacentElement("afterend", test); 
@@ -32,6 +32,7 @@ function disableBuying(){
     msgHighlight.textContent = "You've saved [this much] towards your goal, aka ??%!"; 
     msg.append(msgHighlight);
     pageCover.append(msg);  
+    pageCover.append(fullBar); 
 
     if(localStorage["progress"] > 0){
         var currentProgress = parseFloat(localStorage.progress) + price; 
@@ -39,20 +40,20 @@ function disableBuying(){
     } else {
         localStorage.progress = price;
     }
-    var totalSaved = localStorage.progress; 
-    var percentProgress = (totalSaved/100) * 100;  
-    msgHighlight.textContent = "You've saved " + totalSaved + " towards your goal of $100, aka " + percentProgress +"%"; 
+    var totalSaved = parseFloat(localStorage.progress); 
+    var percentProgress = (totalSaved/100) * 100;   
+    msgHighlight.textContent = "You've saved $" + totalSaved.toFixed(2) + " towards your goal of $100, aka " + percentProgress.toFixed(2) +"%"; 
+    fillProgress(totalSaved); 
 }
 
 var i = 0; 
-function fillProgress() {
+function fillProgress(totalSaved) {
     if (i == 0){
         i = 1; 
         var width = 1; 
         var id = setInterval(frame, 10); 
         function frame() {
-            
-            if (width >= price){
+            if (width >= totalSaved){
                 clearInterval(id); 
             } else {
                 width++; 
@@ -60,7 +61,6 @@ function fillProgress() {
             }
         }
     }
-    setTimeout(disableBuying, 3000); 
 }
 //add updateDisplays function that shows your goal 
 //and how far percentage wise you are to it
@@ -70,4 +70,4 @@ function fillProgress() {
 const saveButton = document.createElement("button"); 
 saveButton.textContent = "Let's save!"; 
 piggyBankContainer.append(saveButton); 
-saveButton.addEventListener("click", fillProgress);
+saveButton.addEventListener("click", disableBuying);
