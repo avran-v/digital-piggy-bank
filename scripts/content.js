@@ -33,7 +33,11 @@ fullBar.append(myProgress);
 const congratsMessage = document.createElement("h1"); 
 
 //piggyBankContainer.append(fullBar); 
-test.textContent = "Why don't you save this money for your goal?"; 
+if(localStorage.goalName == null){
+    test.textContent = "Why don't you save this money for a goal?"; 
+} else {
+    test.textContent = "Why don't you save this money for your " + localStorage.goalName + " goal?";
+}
 const navbar = document.getElementById("navbar-main");
 navbar.insertAdjacentElement("afterend", piggyBankSetup); 
 const belowPrice = document.querySelector("div.a-section.a-spacing-none.aok-align-center");
